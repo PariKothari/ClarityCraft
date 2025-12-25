@@ -21,17 +21,7 @@ npm install
 You can refer to .env.example for the required variables.
 - Copy lib/firebase.example.js to lib/firebase.js and update it to use your own keys from .env.local.
 - Convex setup:
-After cloning, you may face the error "Module not found: Can't resolve 'convex/_generated/api.js'".
-This happens because Convex auto‑generated files are ignored in GitHub.
-To fix it, run:
-npx convex login
-npx convex dev --once --configure=new
-(first time to configure)
-or simply:
-npx convex dev
-(after configuration).
-This regenerates the convex/_generated folder locally.
-On Vercel, these files are regenerated automatically during build.
+run:npx convex dev
 - Run the project locally using
 npm run dev
 - Open the browser and go to
