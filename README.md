@@ -10,15 +10,28 @@ Features:
 
 Tech stack: Next.js, Node.js, Gemini API, Firebase, Convex, Vercel
 
+
 Setup instructions:
 - Clone the repository using
 git clone https://github.com/PariKothari/ClarityCraft.git
 cd ClarityCraft
 - Install dependencies using
 npm install
-- Create a file named .env.local in the project root and add your API keys, for example
-NEXT_PUBLIC_GEMINI_API_KEY=your_key_here
-Add Firebase or Convex keys if required.
+- Create a file named .env.local in the project root and add your API keys.
+You can refer to .env.example for the required variables.
+- Copy lib/firebase.example.js to lib/firebase.js and update it to use your own keys from .env.local.
+- Convex setup:
+After cloning, you may face the error "Module not found: Can't resolve 'convex/_generated/api.js'".
+This happens because Convex auto‑generated files are ignored in GitHub.
+To fix it, run:
+npx convex login
+npx convex dev --once --configure=new
+(first time to configure)
+or simply:
+npx convex dev
+(after configuration).
+This regenerates the convex/_generated folder locally.
+On Vercel, these files are regenerated automatically during build.
 - Run the project locally using
 npm run dev
 - Open the browser and go to
