@@ -8,7 +8,7 @@ node_modules/
 out/
 
 # Environment variables (API keys, secrets)
-.env
+
 .env.local
 .env.development
 .env.production
@@ -35,4 +35,6 @@ coverage/
 
 # Misc system files
 .DS_Store
+
+
 
