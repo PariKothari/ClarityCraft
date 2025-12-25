@@ -13,8 +13,6 @@ out/
 .env.development
 .env.production
 
-# Firebase config file
-lib/firebase.js
 
 # Gemini test file (not needed in repo)
 geminitest.js
@@ -22,8 +20,7 @@ geminitest.js
 # Client secret file
 client_secret.txt
 
-# Convex generated folder
-convex/_generated/
+
 
 # Logs
 npm-debug.log*
