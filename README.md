@@ -10,6 +10,8 @@ Features:
 
 Tech stack: Next.js, Node.js, Gemini API, Firebase, Convex, Vercel
 
+-Deployed Project link:https://clarity-craft-five.vercel.app/
+
 
 Setup instructions:
 - Clone the repository using
