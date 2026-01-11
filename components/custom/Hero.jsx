@@ -18,6 +18,8 @@ function Hero() {
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const [openDialog, setOpenDialog] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
 
   const createUser = useMutation(api.users.createUser);
   const createWorkspace = useMutation(api.workspace.createWorkspace);
@@ -65,9 +67,11 @@ function Hero() {
       null;
 
     if (!userId) {
-      console.error("❌ User ID missing");
+      console.error("User ID missing");
       return;
     }
+
+    setIsLoading(true);
 
     const combinedInput = `Problem: ${problemInput}\nStuck: ${stuckInput}`;
     const userMsg = { role: "user", content: combinedInput };
@@ -78,7 +82,7 @@ function Hero() {
       const { reply } = await fetchGeminiResponse(combinedInput);
       if (reply) aiReply = reply;
     } catch (error) {
-      console.error("❌ Gemini error:", error);
+      console.error("Gemini error:", error);
     }
 
     const assistantMsg = { role: "assistant", content: aiReply };
@@ -90,8 +94,11 @@ function Hero() {
         messages: [userMsg, assistantMsg],
       });
     } catch (err) {
-      console.error("❌ Workspace creation failed:", err);
+      console.error("Workspace creation failed:", err);
     }
+
+    setIsLoading(false);
+    setIsConnecting(true);
 
     if (workspaceId) {
       router.push("/workspace/" + workspaceId);
@@ -99,8 +106,8 @@ function Hero() {
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-[93vh] px-4 bg-black text-white">
-      {/* 🔐 Sign In / Avatar */}
+    <div className="relative flex flex-col items-center justify-center min-h-[93vh] px-4 bg-black text-white overflow-y-hidden">
+      {/* Sign In / Avatar */}
       <div className="absolute top-6 right-6">
         {!userDetail ? (
           <button
@@ -136,13 +143,13 @@ function Hero() {
         )}
       </div>
 
-      {/* 🖤 Heading */}
+      {/* Heading */}
       <h2 className="font-bold text-4xl text-center mb-2">ClarityCraft</h2>
       <p className="text-gray-400 text-center mb-8">
         Paste a LeetCode problem and tell us where you’re stuck. Get step‑by‑step guidance and visualizations.
       </p>
 
-      {/* 📝 Input Boxes + Centered Action Button */}
+      {/* Input Boxes + Centered Action Button */}
       <div className="w-full max-w-3xl bg-[#111] border border-gray-700 rounded-xl p-7 space-y-4">
         <input
           placeholder="Paste LeetCode problem link or topic..."
@@ -151,7 +158,7 @@ function Hero() {
           className="bg-[#1a1a1a] text-white border border-gray-600 rounded-md px-4 py-3 w-full focus:outline-none"
         />
         <input
-          placeholder="Where are you stuck or want full Explanation?(e.g. Step,Approach,Syntax,optimization)"
+          placeholder="Where are you stuck or want full Explanation?(e.g. Step, Approach, Syntax, optimization)"
           value={stuckInput}
           onChange={(e) => setStuckInput(e.target.value)}
           className="bg-[#1a1a1a] text-white border border-gray-600 rounded-md px-5 py-4 w-full focus:outline-none"
@@ -161,25 +168,29 @@ function Hero() {
         <div className="flex justify-center pt-4">
           <button
             onClick={onGenerate}
-            disabled={!problemInput && !stuckInput}
+            disabled={(!problemInput && !stuckInput) || isLoading || isConnecting}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md shadow-md transition-transform active:scale-95 disabled:opacity-50"
           >
-             Start Revision
+            {isLoading
+              ? "Loading..."
+              : isConnecting
+              ? "Connecting..."
+              : "Start"}
           </button>
         </div>
       </div>
 
-      {/* 🧠 Vault Button */}
+      {/* Vault Button */}
       <div className="mt-10">
         <button
           onClick={() => router.push("/vault")}
           className="px-6 py-3 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 active:scale-95 transition-transform duration-150 cursor-pointer"
         >
-          🔍 View Your Vault
+          View Your Vault
         </button>
       </div>
 
-      {/* 🔐 Sign In Dialog */}
+      {/* Sign In Dialog */}
       <SignInDialog openDialog={openDialog} closeDialog={(v) => setOpenDialog(v)} />
     </div>
   );
